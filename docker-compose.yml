@@ -60,23 +60,6 @@ services:
       timeout: 10s
       retries: 3
 
-  # Sample application that generates logs
-  app-logger:
-    image: alpine:latest
-    container_name: app-logger
-    command: >
-      sh -c "
-        while true; do
-        log_line=\"{\\\"timestamp\\\":\\\"\\$(date -Iseconds)\\\",\\\"level\\\":\\\"INFO\\\",\\\"service\\\":\\\"sample-app\\\",\\\"message\\\":\\\"Sample log message \\$RANDOM\\\"}\";
-        echo \\\"\\$log_line\\\" | tee /dev/stdout | nc -w1 logstash 5000;
-        sleep 5;  
-      done
-      "
-    networks:
-      - elk
-    depends_on:
-      - logstash
-
 volumes:
   elasticsearch_data:
     driver: local
