@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "winston": "^3.11.0"
+    "winston": "^3.11.0",
+    "winston-tcp": "^3.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
