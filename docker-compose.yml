@@ -49,6 +49,7 @@ services:
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
       - xpack.security.enabled=false
+      - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=a7a6311933d3503b89bc2dbc36572c01a6c80e1233d3503b89bc2dbc36572c01
     networks:
       - elk
     depends_on:
@@ -59,6 +60,31 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+
+  filebeat:
+    build:
+        context: ./filebeat
+    container_name: filebeat
+    command: filebeat -e -strict.perms=false
+    volumes:
+        - ./nodejs-logs:/src/logs
+    networks:
+      - elk
+    depends_on:
+        - elasticsearch
+        - kibana
+
+  nodejs-app:
+    build:
+      context: ./nodejs-app 
+      dockerfile: Dockerfile
+    container_name: nodejs-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - elasticsearch
+    volumes:
+        - ./nodejs-logs:/src/logs
 
 volumes:
   elasticsearch_data:
